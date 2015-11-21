@@ -9,6 +9,12 @@ public class PinItem {
     PinItem(){
 
     }
+    PinItem(PinItem p){
+        mCategory=p.mCategory;
+        mTitle=p.mTitle;
+        mValue=p.mValue;
+        mDescription=p.mDescription;
+    }
     String getmCategory(){return mCategory;}
     String getmTitle(){return mTitle;}
     String getmDescription(){return mDescription;}

@@ -25,6 +25,7 @@ public class SessionManager {
     private static final String PREF_NAME = "GreenBeanLogin";
 
     private static final String KEY_IS_LOGGEDIN = "isLoggedIn";
+    private static String KEY_EMAIL="email";
 
     public SessionManager(Context context) {
         this._context = context;
@@ -32,7 +33,7 @@ public class SessionManager {
         editor = pref.edit();
     }
 
-    public void setLogin(boolean isLoggedIn) {
+    public void setLogin(boolean isLoggedIn,String email) {
 
         editor.putBoolean(KEY_IS_LOGGEDIN, isLoggedIn);
 

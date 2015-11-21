@@ -35,6 +35,7 @@ public class Twitterama extends ListFragment {
 
         String TAG="TWITTERAMA";
         Log.d(TAG, "inside twitterama");
+        Log.d(TAG,querystring);
         final SearchTimeline searchTimeline = new SearchTimeline.Builder()
                 .query(querystring)
                 .build();
