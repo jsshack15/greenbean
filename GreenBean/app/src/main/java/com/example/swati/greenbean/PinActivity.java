@@ -12,18 +12,39 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PinActivity extends AppCompatActivity implements AbsListView.OnItemClickListener{
     ArrayList<PinItem> pinitems;
     ListView listView;
     PinAdapter listAdapter;
     final String TAG="PIN_ACTIVITY";
+    private SQLiteHandler db;
+    private SessionManager session;
+    private PinItem temp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pin);
+        // SqLite database handler
+        db = new SQLiteHandler(getApplicationContext());
+
+        // session manager
+        session = new SessionManager(getApplicationContext());
+        Log.d("PIN ACTIVITY", session.getKeyEmail());
+
+
         listView = (ListView) findViewById(R.id.list);
         pinitems = new ArrayList<PinItem>();
         listAdapter = new PinAdapter(getApplicationContext(),this, pinitems);
@@ -32,7 +53,7 @@ public class PinActivity extends AppCompatActivity implements AbsListView.OnItem
         item1.setmCategory("Water");
         item1.setmTitle("Drivin' Dirty");
         item1.setmDescription("Skip washing your car or visit a carwash that uses reclaimed water!");
-        item1.setmValue(5);
+        item1.setmValue(10);
         listView.setOnItemClickListener(this);
 
         PinItem item3=new PinItem();
@@ -53,42 +74,42 @@ public class PinActivity extends AppCompatActivity implements AbsListView.OnItem
         item5.setmCategory("Transport");
         item5.setmTitle("Carpooling");
         item5.setmDescription("Take your friends to work, in your car, or tag along with them!");
-        item5.setmValue(15);
+        item5.setmValue(10);
 
 
         PinItem item2=new PinItem();
         item2.setmCategory("Water");
         item2.setmTitle("Shower Sprinter");
         item2.setmDescription("Pin it every time you shower less than 5 minutes!");
-        item2.setmValue(5);
+        item2.setmValue(12);
 
 
         PinItem item6=new PinItem();
         item6.setmCategory("Energy");
         item6.setmTitle("Lighten up");
         item6.setmDescription("Pin it every time you replace your power quelching CFLs with LEDs!");
-        item6.setmValue(10);
+        item6.setmValue(15);
 
 
         PinItem item7=new PinItem();
         item7.setmCategory("Waste");
         item7.setmTitle("Carry the carry bag");
         item7.setmDescription("Click on me every time you visit Shoppers' Stop or the like and turn down their plastic bags!");
-        item7.setmValue(10);
+        item7.setmValue(5);
 
 
         PinItem item8=new PinItem();
         item8.setmCategory("Transport");
         item8.setmTitle("Public Transport");
         item8.setmDescription("Pin it every time you take the metro or public transport to run errands!");
-        item8.setmValue(20);
+        item8.setmValue(15);
 
 
         PinItem item9=new PinItem();
         item9.setmCategory("Water");
         item9.setmTitle("Lunar Laundry");
         item9.setmDescription("Get an Energy Star washer, it'll be 37% more money-saving than others.");
-        item9.setmValue(15);
+        item9.setmValue(5);
 
         pinitems.add(item1);
         pinitems.add(item2);
@@ -112,13 +133,81 @@ public class PinActivity extends AppCompatActivity implements AbsListView.OnItem
 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        PinItem temp = new PinItem(pinitems.get(position));
+         temp = new PinItem(pinitems.get(position));
         //temp.setCategory(fee);
 
         Log.d(TAG,temp.getmTitle());
+        Log.d(TAG,temp.getmCategory());
+        Log.d(TAG,String.valueOf(temp.getmValue()));
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_SETPOINT, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Login Response: " + response.toString());
+                //hideDialog();
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    //Log.d(TAG,"SUCCESSFUL LOGIN");
+                    // Check for error node in json
+                    if (!error) {
+                        // user successfully logged in
+                        // Create login session
+                      //  session.setLogin(true);
+                      //  session.setEmail(email);
+                        Log.d("PIN ACTIVITY","successful added");
+                        // Now store the user in SQLite
+
+                        //finish();
+                    } else {
+                        // Error in login. Get the error message
+                        String errorMsg = jObj.getString("error_msg");
+                        Toast.makeText(getApplicationContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Login Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+                //hideDialog();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("email", session.getKeyEmail());
+                params.put("category", temp.getmCategory());
+                params.put("value",String.valueOf(temp.getmValue()));
+
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, "pin req");
+
+
         Toast.makeText(getApplication(), "+"+temp.getmValue()+" points added!", Toast.LENGTH_SHORT).show();
 
+
     }
+
+
 
 
     @Override

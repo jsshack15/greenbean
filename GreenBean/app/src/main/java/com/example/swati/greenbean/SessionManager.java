@@ -20,7 +20,7 @@ public class SessionManager {
 
     // Shared pref mode
     int PRIVATE_MODE = 0;
-
+    //private String email;
     // Shared preferences file name
     private static final String PREF_NAME = "GreenBeanLogin";
 
@@ -33,17 +33,23 @@ public class SessionManager {
         editor = pref.edit();
     }
 
-    public void setLogin(boolean isLoggedIn,String email) {
+    public void setLogin(boolean isLoggedIn) {
 
         editor.putBoolean(KEY_IS_LOGGEDIN, isLoggedIn);
-
+        //editor.putString(KEY_EMAIL,email);
         // commit changes
         editor.commit();
 
         Log.d(TAG, "User login session modified!");
     }
+    public void setEmail(String email){
+        editor.putString(KEY_EMAIL,email);
+        //this.email=email;
+        editor.commit();
+    }
 
     public boolean isLoggedIn(){
         return pref.getBoolean(KEY_IS_LOGGEDIN, false);
     }
+    public String getKeyEmail() {return pref.getString(KEY_EMAIL,"");}
 }

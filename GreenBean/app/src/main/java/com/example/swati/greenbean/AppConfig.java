@@ -9,4 +9,6 @@ public class AppConfig {
 
     // Server user register url
     public static String URL_REGISTER = "http://10.0.2.2/android_login_api/register.php";
+    public static String URL_GETPOINT = "http://10.0.2.2/android_login_api/points.php";
+    public static String URL_SETPOINT = "http://10.0.2.2/android_login_api/addpoint.php";
 }

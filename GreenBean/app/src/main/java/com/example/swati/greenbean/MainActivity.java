@@ -9,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         // session manager
         session = new SessionManager(getApplicationContext());
-
+        Log.d("MAIN ACTIVITY", session.getKeyEmail());
         if (!session.isLoggedIn()) {
             logoutUser();
         }
@@ -95,6 +96,10 @@ public class MainActivity extends AppCompatActivity {
                 } else if (position == 1) {
                     Intent intent = new Intent(getApplicationContext(), TwitterActivity.class);
                     startActivity(intent);
+
+                } else if (position == 4) {
+                    Intent intent = new Intent(getApplicationContext(), Greenometer.class);
+                    startActivity(intent);
                 } else {
                     Toast.makeText(MainActivity.this, "Coming Soon!", Toast.LENGTH_SHORT).show();
                 }
@@ -117,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void logoutUser() {
         session.setLogin(false);
+        session.setEmail("");
 
         db.deleteUsers();
 
