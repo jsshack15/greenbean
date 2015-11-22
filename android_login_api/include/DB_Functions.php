@@ -30,7 +30,7 @@ class DB_Functions {
  
       // $sql = "INSERT INTO users(unique_id, name, email, encrypted_password, salt, created_at) VALUES($uuid, '$name', '$email', '$encrypted_password', '$salt', NOW())";
         
-        $stmt = $this->conn->prepare("update users set name='$name', email='$email', encrypted_password='$encrypted_password', salt='$salt', created_at=NOW() where unique_id=3");
+        $stmt = $this->conn->prepare("update users set name='$name', email='$email', encrypted_password='$encrypted_password', salt='$salt', created_at=NOW() where unique_id=4");
         //$stmt->bind_param("sssss", $uuid, $name, $email, $encrypted_password, $salt);
      //$stmt->execute();
     //    $result=$stmt->fetch();
@@ -134,22 +134,26 @@ class DB_Functions {
         $penergy=0;
         $pwaste=0;
         $ptransport=0;
-        
+        $total=0;
         if(strcmp('Water',$category)==0)
         {
             $pwater=$value;
+            $total=$value;
         }
         if(strcmp('Energy',$category)==0){
             $penergy=$value;
+             $total=$value;
         }
         if(strcmp('Transport',$category)==0){
             $ptransport=$value;
+             $total=$value;
         }
         if(strcmp('Waste',$category)==0){
             $pwaste=$value;
+             $total=$value;
         }
         
-        $sql="update pins set water = $pwater + water, energy = energy + $penergy, waste = waste + $pwaste, transport = transport + $ptransport where email = '$email'";
+        $sql="update pins set water = $pwater + water, energy = energy + $penergy, waste = waste + $pwaste, transport = transport + $ptransport, total = total + $total where email = '$email'";
         $stmt = $this->conn->prepare($sql);
  
         //$stmt->bind_param("s", $email);
@@ -162,6 +166,31 @@ class DB_Functions {
         //$stmt->store_result();    
     }
     
+    
+    public function gettotal(){
+        $sql="select email, total from pins";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+     //   $total = $stmt->get_result()->fetch_assoc();
+    //    return $total;
+        
+        $num_rows = $stmt->num_rows();
+        
+        
+        {
+               $total = $stmt->get_result()->fetch_assoc();
+            return $total;
+        }
+        
+        
+//    $output_string = "";  
+
+  //  while($stmt->get_result()->fetch_assoc()){
+    //    $total=$stmt->get_result()->fetch_assoc();
+    //}
+        //return $total;
+
+    }
 
 }
  
