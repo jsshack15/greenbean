@@ -22,5 +22,7 @@
     <string name="btn_logout">LOGOUT</string>
     <string name="name">Fullname</string>
     <string name="title_activity_greenometer">Greenometer</string>
+    <string name="title_activity_leader">LeaderActivity</string>
+    <string name="title_activity_leader_adapter">LeaderAdapter</string>
 
 </resources>

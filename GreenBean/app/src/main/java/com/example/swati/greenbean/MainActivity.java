@@ -1,9 +1,14 @@
 package com.example.swati.greenbean;
 
+import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -61,9 +66,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addDrawerItems() {
-        String[] navArray = {  "Tip of the Day", "Trending in Biosphere", "Friends","Pin 'em","Green O Meter" };
+        String[] navArray = {  "Tip of the Day", "Trending in Biosphere", "LeaderBoard","Pin 'em","Green O Meter" };
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, navArray);
         mDrawerList.setAdapter(mAdapter);
+
+
+
+
+
+
+
     }
 
     private void setupDrawer() {
@@ -93,15 +105,36 @@ public class MainActivity extends AppCompatActivity {
                 if (position == 3) {
                     Intent intent = new Intent(getApplicationContext(), PinActivity.class);
                     startActivity(intent);
+                    mDrawerLayout.closeDrawer(mDrawerList);
                 } else if (position == 1) {
                     Intent intent = new Intent(getApplicationContext(), TwitterActivity.class);
                     startActivity(intent);
+                    mDrawerLayout.closeDrawer(mDrawerList);
 
                 } else if (position == 4) {
                     Intent intent = new Intent(getApplicationContext(), Greenometer.class);
                     startActivity(intent);
-                } else {
-                    Toast.makeText(MainActivity.this, "Coming Soon!", Toast.LENGTH_SHORT).show();
+                    mDrawerLayout.closeDrawer(mDrawerList);
+                } else if (position == 0) {
+                    AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                    alertDialog.setTitle("Tip of the Day");
+                    alertDialog.setMessage("Unplug appliances and electronics when not in use and put your computer to go into “sleep mode” when not in use. When possible, use low quality printer’s setting to save ink.");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+
+                    //alertDialog.setIcon()
+                    alertDialog.show();
+                    mDrawerLayout.closeDrawer(mDrawerList);
+                }
+                else if(position==2){
+                    Intent intent = new Intent(getApplicationContext(), LeaderActivity.class);
+                    startActivity(intent);
+                    mDrawerLayout.closeDrawer(mDrawerList);
+                    //Toast.makeText(MainActivity.this, "Coming Soon!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
