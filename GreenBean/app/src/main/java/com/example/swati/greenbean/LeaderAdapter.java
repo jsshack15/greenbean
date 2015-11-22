@@ -51,7 +51,7 @@ public class LeaderAdapter extends BaseAdapter {
             inflater = (LayoutInflater) activity
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null)
-            convertView = inflater.inflate(R.layout.pin_item, null);
+            convertView = inflater.inflate(R.layout.leader_item, null);
         Log.d("LEAD_ADAPTER", "adapterview updating");
 
         TextView title = (TextView) convertView
@@ -64,8 +64,8 @@ public class LeaderAdapter extends BaseAdapter {
         LeaderItem item = leadItems.get(position);
 
         title.setText(item.getmName());
-        points.setText(item.getmPoints());
-        rank.setText(item.getmRank());
+       points.setText(String.valueOf(item.getmPoints()));
+        rank.setText(String.valueOf(item.getmRank()));
 
 
 

@@ -36,9 +36,30 @@ public class LeaderActivity extends AppCompatActivity {
         listView.setAdapter(listAdapter);
         LeaderItem item = new LeaderItem();
         item.setmName("Swati");
-        item.setmPoints(100);
+        item.setmPoints(853);
         item.setmRank(1);
         leaditems.add(item);
+
+        LeaderItem item1 = new LeaderItem();
+        item1.setmName("Himanshu");
+        item1.setmPoints(40);
+        item1.setmRank(2);
+        leaditems.add(item1);
+
+        LeaderItem item2 = new LeaderItem();
+        item2.setmName("Arjun");
+        item2.setmPoints(0);
+        item2.setmRank(3);
+        leaditems.add(item2);
+
+        LeaderItem item3 = new LeaderItem();
+        item3.setmName("Ramesh");
+        item3.setmPoints(0);
+        item3.setmRank(4);
+        leaditems.add(item3);
+
+
+
         listAdapter.notifyDataSetChanged();
 
     }

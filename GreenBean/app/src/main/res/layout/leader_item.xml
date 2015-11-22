@@ -30,8 +30,9 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:textSize="50px"
+            android:textColor="#cc0099"
             android:paddingLeft="3dip"
-            android:layout_toRightOf="@id/icon"
+            android:layout_toRightOf="@id/rank"
 
 
             />
